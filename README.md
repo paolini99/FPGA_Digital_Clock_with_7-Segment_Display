@@ -44,4 +44,3 @@ This project implements a **digital clock** with a **seven-segment display**, op
 - **Synchronized modular counters** for hours, minutes, and seconds.
 - **Multiplexer** to switch between clock and stopwatch display.
 
-🔗 **For more details, check the full documentation.**
