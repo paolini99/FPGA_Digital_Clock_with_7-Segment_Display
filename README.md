@@ -1,46 +1,56 @@
 # ⏰ Digital Clock with Seven-Segment Display
 
 ## Project Description  
-This project implements a **digital clock** with a **seven-segment display**, operating in a **12-hour format**. The system manages **hours, minutes, and seconds**, with the ability to **manually adjust the time** and use an **independent stopwatch**.  
+This project implements a **digital clock** with a **seven-segment display**, operating in a **12-hour format**. The system handles **hours, minutes, and seconds**, supports **manual time adjustment**, and includes an **independent stopwatch** feature.
 
-## 🔧 **Project Functionality**  
+> ⚙️ The top-level module is **`DE1SOC.v`**, specifically written for the **Terasic DE1-SoC FPGA board**.  
+> 📦 All other modules (e.g., counters, decoders, clock dividers) are **generic** and **not DE1-SoC specific**, making them reusable in other FPGA projects.
 
-### ⏳ **Time Counting**
-- The clock counts from **00:00:00 to 11:59:59**, automatically resetting.
-- The time is displayed on **six seven-segment displays**:
-  - **Hours (HEX4, HEX5)**
-  - **Minutes (HEX2, HEX3)**
-  - **Seconds (HEX0, HEX1)**
-- The FPGA’s base clock (**50 MHz**) is reduced to **1 Hz** using a **clock divider**, allowing for real-time counting.
-- The system uses **synchronized modular counters** to update seconds, minutes, and hours:
-  - **Seconds**: resets after **60**.
-  - **Minutes**: resets after **60**.
-  - **Hours**: resets after **12**.
+---
 
-### 🎨 **Optimized Time Display**
-- The leading **zero is removed** from the hours display when the value is below 10 (e.g., **"7:00"** instead of **"07:00"**).
-- This is achieved through a **dedicated module** that turns off the most significant digit when needed.
+## 🔧 Project Functionality
 
-### 🔧 **Manual Time Adjustment**
-- Two buttons allow for **manual adjustment**:
-  - **KEY[1]** → Increases the hours.
-  - **KEY[2]** → Increases the minutes.
-- The **KEY[0]** button performs a **global reset**, setting the clock back to **00:00:00**.
-- A slow clock ensures smooth updates when adjusting the time.
+### ⏳ Time Counting
+- Counts time from **00:00:00 to 11:59:59**, then resets automatically.
+- Time is displayed on **six seven-segment displays**:
+  - **Hours** → `HEX4`, `HEX5`
+  - **Minutes** → `HEX2`, `HEX3`
+  - **Seconds** → `HEX0`, `HEX1`
+- Uses the FPGA's **50 MHz base clock**, divided down to **1 Hz** using a **clock divider**.
+- Implements **synchronized modular counters**:
+  - **Seconds**: roll over after 60.
+  - **Minutes**: roll over after 60.
+  - **Hours**: roll over after 12.
 
-## ⏱ **Extension: Stopwatch with Start, Stop, and Reset**
-- The system includes an **independent stopwatch**, activated via a **selection switch**.
+### 🎨 Optimized Time Display
+- **Leading zero suppression** for hours when below 10 (e.g., `"7:00"` instead of `"07:00"`).
+- Managed via a **dedicated display control module** that disables the most significant digit if needed.
+
+### 🧭 Manual Time Adjustment
+- **Two push buttons** allow time correction:
+  - `KEY[1]` → Increments the hours.
+  - `KEY[2]` → Increments the minutes.
+- `KEY[0]` performs a **global reset**, setting time back to **00:00:00**.
+- A **slow clock pulse** ensures smooth updates during manual adjustment.
+
+---
+
+## ⏱ Stopwatch Extension
+- Includes an **independent stopwatch**, toggled via a **mode selector switch** (`SW[0]`).
 - Features:
-  - **Measures time down to hundredths of a second**.
-  - **Separate clock management** with a **100 Hz frequency** for precision.
+  - **Measures time with hundredths of a second** precision.
+  - Operates using a **100 Hz clock** for high-resolution timing.
 - Controls:
-  - **KEY[1]** → Starts or pauses the stopwatch.
-  - **KEY[2]** → Stops the stopwatch.
-  - **KEY[0]** → Resets the stopwatch to **00:00:00**.
+  - `KEY[1]` → Start/Pause
+  - `KEY[2]` → Stop
+  - `KEY[0]` → Reset stopwatch to **00:00:00**
 
-## 🛠 **Technologies Used**
-- **FPGA** for hardware-based time management.
-- **Clock Divider** to generate the required frequency.
-- **Synchronized modular counters** for hours, minutes, and seconds.
-- **Multiplexer** to switch between clock and stopwatch display.
+---
+
+## 🛠 Technologies Used
+- **Verilog HDL** on **FPGA (DE1-SoC board)**
+- **Clock Divider** modules for 1 Hz and 100 Hz signals
+- **Synchronous modular counters** for time tracking
+- **Seven-segment display encoders**
+- **Multiplexer** to switch between clock and stopwatch modes
 
